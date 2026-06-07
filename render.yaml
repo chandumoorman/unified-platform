@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: unified-platform
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: unified-platform-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: 30
+
+databases:
+  - name: unified-platform-db
+    plan: free
